@@ -1,0 +1,15 @@
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Wordle
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Wordle.deps.json
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Wordle.runtimeconfig.json
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Wordle.dll
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Wordle.pdb
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.GeneratedMSBuildEditorConfig.editorconfig
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.AssemblyInfoInputs.cache
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.AssemblyInfo.cs
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.csproj.CoreCompileInputs.cache
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.sourcelink.json
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.dll
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/refint/Wordle.dll
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.pdb
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.genruntimeconfig.cache
+/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/ref/Wordle.dll
