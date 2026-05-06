@@ -77,7 +77,7 @@ namespace NotificationSystem
 
         public  List<User> GetAllUsers()
         {
-            return userRepository.Get();
+            return userRepository.GetAll();
         }
 
         public void GetUser()
@@ -121,7 +121,11 @@ namespace NotificationSystem
             Console.WriteLine("2. Phone");
             Console.WriteLine("3. Both");
 
-            int choice = int.Parse(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine(), out int choice))
+            {
+                Console.WriteLine("Please enter a valid number");
+                return;
+            }
 
             string? email = null;
             string? phone = null;

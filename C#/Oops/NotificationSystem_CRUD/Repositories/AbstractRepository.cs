@@ -4,24 +4,22 @@ namespace NotificationSystem.Repositories
 {
 internal abstract class Repository<k,T> : IRepository<k,T>
 {
-    protected List<T> items = new List<T>();
+    protected Dictionary<k,T> _items;
 
-    public virtual T Create(T item)
-    {
-        items.Add(item);
-        return item;
-    }
+    public abstract T Create(T item);
 
     public virtual List<T> GetAll()
     {
-        return items;
+        if(_items.Count==0) return null;
+        var list=_items.Values.ToList();
+        return list;
     }
 
-    public abstract T GetById(int k);
+    public abstract T GetById(k key);
 
-    public abstract T Update(int k,T item);
+    public abstract T Update(k key,T item);
 
-    public abstract T Delete(int k);
+    public abstract T Delete(k key);
 
     }
 }

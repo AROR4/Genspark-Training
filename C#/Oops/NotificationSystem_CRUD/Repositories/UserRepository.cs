@@ -4,29 +4,25 @@ namespace NotificationSystem.Repositories{
 internal class UserRepository : Repository<int,User>
 {
     static int lastid = 0;
-    Dictionary<int,User> _users=new Dictionary<int, User>();
+
+    public UserRepository()
+    {
+        _items = new Dictionary<int, User>();
+    }
 
     public override User Create(User item)
     {
        int userid=++lastid;
        lastid=userid;
        item.id=userid;
-       _users.Add(userid,item);
-       return _users[userid];
+       _items.Add(userid,item);
+       return _items[userid];
 
-    }
-    public List<User> Get()
-    {
-        if(_users.Count == 0) 
-                return null;
-            var list = _users.Values.ToList();
-            list.Sort();
-            return list;
     }
     public override User? GetById(int id)
     {
         User user;
-        if(_users.TryGetValue(id,out user))
+        if(_items.TryGetValue(id,out user))
             {
                 return user;
             }
@@ -39,7 +35,7 @@ internal class UserRepository : Repository<int,User>
 
         if (user != null)
         {
-            _users[id]=updatedUser;
+            _items[id]=updatedUser;
             return GetById(id);
         }
         return null;
@@ -49,7 +45,7 @@ internal class UserRepository : Repository<int,User>
     {
         var user = GetById(id);
         if (user != null)
-            _users.Remove(id);
+            _items.Remove(id);
         return user;
     }
 }
