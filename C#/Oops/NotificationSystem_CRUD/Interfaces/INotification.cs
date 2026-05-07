@@ -1,8 +1,10 @@
+using NotificationSystem.Enums;
+
 namespace NotificationSystem.Interfaces
 {
     internal interface INotification
     {
-        int GetType();
+        public NotificationType type { get; set; }
         void Send(string message, string recipient);
 
 

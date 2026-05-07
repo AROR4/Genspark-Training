@@ -49,7 +49,7 @@ namespace NotificationSystem
             return newuser;
         }
 
-        public User DeleteUser(int id)
+        public User? DeleteUser(int id)
         {
             return userRepository.Delete(id);
         }
@@ -106,7 +106,11 @@ namespace NotificationSystem
         public void Update()
         {
             Console.Write("Enter User ID: ");
-            int id = int.Parse(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Invalid ID");
+                return;
+            }
 
             var user = userRepository.GetById(id);
 
@@ -133,21 +137,16 @@ namespace NotificationSystem
             switch (choice)
             {
                 case 1:
-                    Console.Write("Enter new email: ");
-                    email = Console.ReadLine();
+                    email = PromptForValidEmail();
                     break;
 
                 case 2:
-                    Console.Write("Enter new phone: ");
-                    phone = Console.ReadLine();
+                    phone = PromptForValidPhone();
                     break;
 
                 case 3:
-                    Console.Write("Enter new email: ");
-                    email = Console.ReadLine();
-
-                    Console.Write("Enter new phone: ");
-                    phone = Console.ReadLine();
+                    email = PromptForValidEmail();
+                    phone = PromptForValidPhone();
                     break;
 
                 default:
@@ -195,6 +194,38 @@ namespace NotificationSystem
         private bool IsValidPhone(string phone)
         {
             return phone.Length == 10 && phone.All(char.IsDigit);
+        }
+
+        private string PromptForValidEmail()
+        {
+            string email;
+            do
+            {
+                Console.Write("Enter new email: ");
+                email = Console.ReadLine() ?? string.Empty;
+                if (!IsValidEmail(email))
+                {
+                    Console.WriteLine("Invalid email format.");
+                }
+            } while (!IsValidEmail(email));
+
+            return email;
+        }
+
+        private string PromptForValidPhone()
+        {
+            string phone;
+            do
+            {
+                Console.Write("Enter new phone: ");
+                phone = Console.ReadLine() ?? string.Empty;
+                if (!IsValidPhone(phone))
+                {
+                    Console.WriteLine("Invalid phone number. Must be 10 digits.");
+                }
+            } while (!IsValidPhone(phone));
+
+            return phone;
         }
     }
 }

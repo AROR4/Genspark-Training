@@ -2,24 +2,21 @@ using NotificationSystem.Interfaces;
 
 namespace NotificationSystem.Repositories
 {
-internal abstract class Repository<k,T> : IRepository<k,T>
-{
-    protected Dictionary<k,T> _items;
-
-    public abstract T Create(T item);
-
-    public virtual List<T> GetAll()
+    internal abstract class Repository<TKey, T> : IRepository<TKey, T> where TKey : notnull
     {
-        if(_items.Count==0) return null;
-        var list=_items.Values.ToList();
-        return list;
-    }
+        protected readonly Dictionary<TKey, T> _items = new();
 
-    public abstract T GetById(k key);
+        public abstract T Create(T item);
 
-    public abstract T Update(k key,T item);
+        public virtual List<T> GetAll()
+        {
+            return _items.Values.ToList();
+        }
 
-    public abstract T Delete(k key);
+        public abstract T? GetById(TKey key);
 
+        public abstract T? Update(TKey key, T item);
+
+        public abstract T? Delete(TKey key);
     }
 }

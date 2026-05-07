@@ -22,7 +22,7 @@ namespace NotificationSystem.Models
 
         public int CompareTo(User? other)
         {
-           return this.id.CompareTo(other.id);
+           return other is null ? 1 : id.CompareTo(other.id);
         }
 
     }

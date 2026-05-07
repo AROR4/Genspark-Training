@@ -5,11 +5,6 @@ internal class UserRepository : Repository<int,User>
 {
     static int lastid = 0;
 
-    public UserRepository()
-    {
-        _items = new Dictionary<int, User>();
-    }
-
     public override User Create(User item)
     {
        int userid=++lastid;
@@ -21,11 +16,10 @@ internal class UserRepository : Repository<int,User>
     }
     public override User? GetById(int id)
     {
-        User user;
-        if(_items.TryGetValue(id,out user))
-            {
-                return user;
-            }
+        if (_items.TryGetValue(id, out var user))
+        {
+            return user;
+        }
         return null;
     }
 

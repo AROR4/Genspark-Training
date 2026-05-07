@@ -38,7 +38,7 @@ namespace NotificationSystem.Services
         {
             notificationChannel.Send(message, recipient);
             
-            Notification currentnotification=new Notification(message,notificationChannel.GetType()==1? Notification.NotifType.Email : Notification.NotifType.SMS,recipient);
+            Notification currentnotification=new Notification(message,notificationChannel.type,recipient);
             
             notificationRepository.Create(currentnotification);
         }
