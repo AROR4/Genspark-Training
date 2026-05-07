@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/Wordle.csproj": {}
+    "/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/Wordle.csproj": {}
   },
   "projects": {
-    "/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/Wordle.csproj": {
+    "/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/Wordle.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/Wordle.csproj",
+        "projectUniqueName": "/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/Wordle.csproj",
         "projectName": "Wordle",
-        "projectPath": "/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/Wordle.csproj",
-        "packagesPath": "/Users/raghavarora/.nuget/packages/",
-        "outputPath": "/Users/raghavarora/Documents/Genspark-Training/C#/Oops/Wordle/obj/",
+        "projectPath": "/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/Wordle.csproj",
+        "packagesPath": "/Users/raghav/.nuget/packages/",
+        "outputPath": "/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/raghavarora/.nuget/NuGet/NuGet.Config"
+          "/Users/raghav/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -59,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.203/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.202/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

@@ -8,36 +8,37 @@ namespace Wordle.Services
 {
     public class GameService : IGameService
     {
-        public GameModel GameModel ;
+        private GameModel? _gameModel;
 
         public void Start(Difficulty difficulty)
         {
             WordProvider wordProvider = new WordProvider();
             string secretWord = wordProvider.GetWord(difficulty);
-            GameModel = new GameModel ( difficulty,secretWord);
+            _gameModel = new GameModel(difficulty, secretWord);
+            GameModel gameModel = GetCurrentGame();
 
-            while (GameModel.AttemptsTaken < 6)
+            while (gameModel.AttemptsTaken < 6)
             {
-                Console.WriteLine($"\n--- Attempt {GameModel.AttemptsTaken + 1} of 6 ---");
+                Console.WriteLine($"\n--- Attempt {gameModel.AttemptsTaken + 1} of 6 ---");
                 string guess = InputGuess();
                 
-                string result = FeedbackGenerator.GetAttemptFeedback(GameModel.SecretWord, guess.ToUpper());
-                GameModel.Guesses.Add(guess.ToUpper());
+                string result = FeedbackGenerator.GetAttemptFeedback(gameModel.SecretWord, guess.ToUpper());
+                gameModel.Guesses.Add(guess.ToUpper());
                 
                 DisplayFeedback(guess, result);
 
                 if (result == "GGGGG")
                 {
-                    GameModel.IsWon = true;
-                    GameModel.Score = FeedbackGenerator.CalculateScore(GameModel.AttemptsTaken + 1, true);
-                    Console.WriteLine($"\n{FeedbackGenerator.GetFinalFeedback(GameModel.AttemptsTaken + 1)}");
+                    gameModel.IsWon = true;
+                    gameModel.Score = FeedbackGenerator.CalculateScore(gameModel.AttemptsTaken + 1, true);
+                    Console.WriteLine($"\n{FeedbackGenerator.GetFinalFeedback(gameModel.AttemptsTaken + 1)}");
                     return;
                 }
-                GameModel.AttemptsTaken++;
+                gameModel.AttemptsTaken++;
             }
             
-            GameModel.IsWon = false;
-            GameModel.Score = 0;
+            gameModel.IsWon = false;
+            gameModel.Score = 0;
             Console.WriteLine("\nGame Over! You ran out of attempts.");
         }
 
@@ -50,7 +51,7 @@ namespace Wordle.Services
 
                 try
                 {
-                    GuessValidator.ValidateWord(input, GameModel.Guesses);
+                    GuessValidator.ValidateWord(input, GetCurrentGame().Guesses);
                     return input;
                 }
                 catch (InvalidGuessException ex)
@@ -93,7 +94,12 @@ namespace Wordle.Services
 
         public GameModel GetGameState()
         {
-            return GameModel;
+            return GetCurrentGame();
+        }
+
+        private GameModel GetCurrentGame()
+        {
+            return _gameModel ?? throw new InvalidOperationException("Game has not been started.");
         }
     }
 
