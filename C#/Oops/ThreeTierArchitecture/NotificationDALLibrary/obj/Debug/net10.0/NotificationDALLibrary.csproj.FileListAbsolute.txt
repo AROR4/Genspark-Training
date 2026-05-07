@@ -1,0 +1,16 @@
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/bin/Debug/net10.0/NotificationDALLibrary.deps.json
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/bin/Debug/net10.0/NotificationDALLibrary.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/bin/Debug/net10.0/NotificationDALLibrary.pdb
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/bin/Debug/net10.0/NotificationModelLibrary.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/bin/Debug/net10.0/NotificationModelLibrary.pdb
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.csproj.AssemblyReference.cache
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.AssemblyInfoInputs.cache
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.AssemblyInfo.cs
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.csproj.CoreCompileInputs.cache
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.sourcelink.json
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/Notifica.69973E61.Up2Date
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/refint/NotificationDALLibrary.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.pdb
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/ThreeTierArchitecture/NotificationDALLibrary/obj/Debug/net10.0/ref/NotificationDALLibrary.dll

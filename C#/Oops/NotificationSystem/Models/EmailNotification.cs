@@ -1,19 +1,18 @@
 using NotificationSystem.Interfaces;
+using NotificationSystem.Enums;
 
 namespace NotificationSystem.Models
 {
     internal class EmailNotification : INotification
     {
-        public int type =1;
-        public new int GetType()
+        public NotificationType Type => NotificationType.Email;
+
+        public Notification Send(string message, User user)
         {
-            return type;
-        }
-        public void Send(string message, string recipient)
-        {
-            Console.WriteLine($"Email sent to {recipient}: {message} at {DateTime.Now}");
+            Console.WriteLine($"Email sent to {user.Email}: {message} at {DateTime.Now}");
+            return new Notification(message, NotificationType.Email, user.Email);
         }
 
-       
+      
     }
 }

@@ -1,17 +1,16 @@
+using NotificationSystem.Enums;
 using NotificationSystem.Interfaces;
 
 namespace NotificationSystem.Models
 {
     internal class SmsNotification : INotification
     {   
-        public int type =2;
-        public new int GetType()
+        public NotificationType Type => NotificationType.Sms;
+
+        public Notification Send(string message, User user)
         {
-            return type;
-        }
-        public void Send(string message, string recipient)
-        {
-            Console.WriteLine($"SMS sent to {recipient}: {message} at {DateTime.Now}");
+            Console.WriteLine($"SMS sent to {user.PhoneNumber}: {message} at {DateTime.Now}");
+            return new Notification(message, Type, user.PhoneNumber);
         }
     }
 }

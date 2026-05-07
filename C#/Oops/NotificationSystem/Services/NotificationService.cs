@@ -7,15 +7,6 @@ namespace NotificationSystem.Services
     {
         private  List<Notification> notifications = [];
 
-        public void SendEmail(string message,User user)
-        {
-            SendNotification(new EmailNotification(), message, user.Email);
-        }
-
-        public void SendSms( string message, User user)
-        {
-            SendNotification(new SmsNotification(), message, user.PhoneNumber);
-        }
 
         public void PrintHistory()
         {
@@ -32,12 +23,13 @@ namespace NotificationSystem.Services
             }
         }
 
-        private void SendNotification(INotification notificationChannel, string message, string recipient)
+        public void SendNotification(INotification notificationChannel, string message, User user)
         {
-            notificationChannel.Send(message, recipient);
+            var current=notificationChannel.Send(message, user);
             
-            notifications.Add(new Notification(message,notificationChannel.GetType()==1? Notification.NotifType.Email : Notification.NotifType.SMS));
+            notifications.Add(current);
         }
 
+        
     }
 }

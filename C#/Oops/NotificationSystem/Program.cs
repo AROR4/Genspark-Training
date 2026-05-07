@@ -61,8 +61,8 @@ namespace NotificationSystem
                     Console.WriteLine("Invalid Option Selected. Please try again");
                     }
                     Console.WriteLine("Enter message to sent");
-                    String mesaage=Console.ReadLine()??"";
-                    notificationService.SendEmail(mesaage,users[userchoice-1]);
+                    String message=Console.ReadLine()??"";
+                    notificationService.SendNotification(new EmailNotification(),message,users[userchoice-1]);
                 }
 
                 if(Choice == 3)
@@ -86,8 +86,8 @@ namespace NotificationSystem
                     Console.WriteLine("Invalid Option Selected. Please try again");
                     }
                     Console.WriteLine("Enter message to sent");
-                    String mesaage=Console.ReadLine()??"";
-                    notificationService.SendSms(mesaage,users[userchoice-1]);
+                    String message=Console.ReadLine()??"";
+                    notificationService.SendNotification(new SmsNotification(),message,users[userchoice-1]);
                 }
                 if(Choice == 4)
                 {

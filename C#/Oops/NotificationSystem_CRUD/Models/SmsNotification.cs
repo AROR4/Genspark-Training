@@ -4,11 +4,11 @@ using NotificationSystem.Interfaces;
 namespace NotificationSystem.Models
 {
     internal class SmsNotification : INotification
-    {   
-        public NotificationType type { get; set; }= NotificationType.Sms;
-        public void Send(string message, string recipient)
+    {
+        public Notification Send(string message, User user)
         {
-            Console.WriteLine($"SMS sent to {recipient}: {message} at {DateTime.Now}");
+            Console.WriteLine($"SMS sent to {user.PhoneNumber}: {message} at {DateTime.Now}");
+            return new Notification(message, NotificationType.Sms, user.PhoneNumber);
         }
     }
 }

@@ -5,13 +5,10 @@ namespace NotificationSystem.Models
 {
     internal class EmailNotification : INotification
     {
-        public NotificationType type { get; set; }= NotificationType.Email;
-       
-        public void Send(string message, string recipient)
+        public Notification Send(string message, User user)
         {
-            Console.WriteLine($"Email sent to {recipient}: {message} at {DateTime.Now}");
+            Console.WriteLine($"Email sent to {user.Email}: {message} at {DateTime.Now}");
+            return new Notification(message, NotificationType.Email, user.Email);
         }
-
-       
     }
 }

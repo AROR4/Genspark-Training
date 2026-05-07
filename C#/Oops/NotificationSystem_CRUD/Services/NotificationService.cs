@@ -6,17 +6,7 @@ namespace NotificationSystem.Services
 {
     internal class NotificationService : INotificationService
     {
-
         NotificationRepository notificationRepository=new NotificationRepository();
-        public void SendEmail(string message,User user)
-        {
-            SendNotification(new EmailNotification(), message, user.Email);
-        }
-
-        public void SendSms( string message, User user)
-        {
-            SendNotification(new SmsNotification(), message, user.PhoneNumber);
-        }
 
         public void PrintHistory()
         {
@@ -34,14 +24,10 @@ namespace NotificationSystem.Services
             }
         }
 
-        private void SendNotification(INotification notificationChannel, string message, string recipient)
+        public void SendNotification(INotification notificationChannel, string message, User user)
         {
-            notificationChannel.Send(message, recipient);
-            
-            Notification currentnotification=new Notification(message,notificationChannel.type,recipient);
-            
+            Notification currentnotification = notificationChannel.Send(message, user);
             notificationRepository.Create(currentnotification);
         }
-
     }
 }

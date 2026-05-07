@@ -84,7 +84,7 @@ namespace NotificationSystem
                         if (users.Count == 0)
                         {
                             Console.WriteLine("No user added yet. Please add user first");
-                            break;
+                            return;
                         }
 
                         Console.WriteLine("Select User");
@@ -94,8 +94,8 @@ namespace NotificationSystem
                         }
 
                         int userchoice;
-                        while (!int.TryParse(Console.ReadLine(), out userchoice) 
-                            || userchoice <= 0 
+                        while (!int.TryParse(Console.ReadLine(), out userchoice)
+                            || userchoice <= 0
                             || userchoice > users.Count)
                         {
                             Console.WriteLine("Invalid Option Selected. Please try again");
@@ -104,7 +104,7 @@ namespace NotificationSystem
                         Console.WriteLine("Enter message to send");
                         string message = Console.ReadLine() ?? "";
 
-                        notificationService.SendEmail(message, users[userchoice - 1]);
+                        notificationService.SendNotification(new EmailNotification(), message, users[userchoice - 1]);
                         break;
                     }
 
@@ -115,18 +115,18 @@ namespace NotificationSystem
                         if (users.Count == 0)
                         {
                             Console.WriteLine("No user added yet. Please add user first");
-                            break;
+                            return;
                         }
 
                         Console.WriteLine("Select User");
                         for (int i = 0; i < users.Count; i++)
                         {
-                            Console.WriteLine($"{i + 1}. {users[i]}");
+                            Console.WriteLine($"{i + 1}. {users[i]} \n");
                         }
 
                         int userchoice;
-                        while (!int.TryParse(Console.ReadLine(), out userchoice) 
-                            || userchoice <= 0 
+                        while (!int.TryParse(Console.ReadLine(), out userchoice)
+                            || userchoice <= 0
                             || userchoice > users.Count)
                         {
                             Console.WriteLine("Invalid Option Selected. Please try again");
@@ -135,7 +135,7 @@ namespace NotificationSystem
                         Console.WriteLine("Enter message to send");
                         string message = Console.ReadLine() ?? "";
 
-                        notificationService.SendSms(message, users[userchoice - 1]);
+                        notificationService.SendNotification(new SmsNotification(), message, users[userchoice - 1]);
                         break;
                     }
 
