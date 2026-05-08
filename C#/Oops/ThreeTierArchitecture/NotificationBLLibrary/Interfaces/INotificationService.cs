@@ -1,12 +1,17 @@
 using NotificationModelLibrary;
-using NotificationModelLibrary.Interfaces;
+using NotificationModelLibrary.Enums;
+
 
 
 namespace NotificationBLLibrary.Interfaces
 {
     public interface INotificationService
     {
-        void SendNotification(INotification notificationChannel, string message, User user);
-        void PrintHistory();
+        void SendNotification(NotificationType notificationType, User user, string message);
+        List<Notification> GetHistory();
+
+        void SendToAllUsers(NotificationType notificationType, List<User> users, string message);
+
+
     }
 }

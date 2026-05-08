@@ -23,7 +23,7 @@ namespace  NotificationModelLibrary
 
         public override string ToString()
         {
-            return $"{SentDateTime} - {NotificationType} - Recepient : {Recipient} : Message : {Message} \n";
+            return $"{SentDateTime} - {NotificationType} - Recipient : {Recipient} : Message : {Message} \n";
         }
 
     }

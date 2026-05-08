@@ -1,10 +1,12 @@
 using NotificationModelLibrary.Enums;
-using NotificationModelLibrary.Interfaces;
+using NotificationModelLibrary;
+using NotificationBLLibrary.Interfaces;
 
 
-namespace NotificationModelLibrary
+
+namespace NotificationBLLibrary.Senders
 {
-    public class SmsNotification : INotification
+    public class SmsNotificationSender : INotificationSender
     {
         public Notification Send(string message, User user)
         {
