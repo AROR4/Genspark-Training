@@ -71,6 +71,7 @@ class Program
                     Console.WriteLine(
                         "\nLogin Successful!");
 
+
                     break;
                 }
                 else
@@ -91,6 +92,7 @@ class Program
 
         Console.ForegroundColor=ConsoleColor.DarkGreen;
         Console.WriteLine("HI, " + player.Username + " Let's Play!!");
+        Console.WriteLine($"Total Score Till Now: {player.TotalScore}");
         Console.ResetColor();
 
         bool playAgain = true;

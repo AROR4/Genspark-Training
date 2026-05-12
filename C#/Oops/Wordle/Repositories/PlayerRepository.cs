@@ -71,10 +71,16 @@ namespace Wordle.Repositories
             {
                 dbConnection.connection.Open();
 
-                string query =
-                    @"SELECT * FROM Players
-                    WHERE Username=@username
-                    AND Password=@password";
+                string query = @"
+            SELECT p.Id,
+                   p.Username,
+                   COALESCE(SUM(s.Score), 0) AS TotalScore
+            FROM Players p
+            LEFT JOIN Scores s
+            ON p.id = s.playerid
+            WHERE p.Username = @username
+            AND p.Password = @password
+            GROUP BY p.Id, p.Username";
 
                 NpgsqlCommand command =
                     new NpgsqlCommand(query, dbConnection.connection);
@@ -82,14 +88,15 @@ namespace Wordle.Repositories
                 command.Parameters.AddWithValue("@username", username);
                 command.Parameters.AddWithValue("@password", password);
 
-                var reader = command.ExecuteReader();
+                using var reader = command.ExecuteReader();
 
                 if (reader.Read())
                 {
                     return new Player
                     {
                         Id = Convert.ToInt32(reader["Id"]),
-                        Username = reader["Username"].ToString()??""
+                        Username = reader["Username"].ToString() ?? "",
+                        TotalScore = Convert.ToInt32(reader["TotalScore"])
                     };
                 }
 
