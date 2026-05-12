@@ -1,108 +1,85 @@
 using Wordle.Enums;
 using Wordle.Models;
 using Wordle.Exceptions;
-using Wordle.Services;
 using Wordle.interfaces;
+using Wordle.Repositories;
 
 namespace Wordle.Services
 {
-    public class GameService : IGameService
-    {
-        private GameModel? _gameModel;
-
-        public void Start(Difficulty difficulty)
+        public class GameService : IGameService
         {
-            WordProvider wordProvider = new WordProvider();
-            string secretWord = wordProvider.GetWord(difficulty);
-            _gameModel = new GameModel(difficulty, secretWord);
-            GameModel gameModel = GetCurrentGame();
-
-            while (gameModel.AttemptsTaken < 6)
+            private GameModel? _gameModel;
+            ScoreRepository scoreRepository=new ScoreRepository();
+            public void Start(
+                int playerId,
+                Difficulty difficulty)
             {
-                Console.WriteLine($"\n--- Attempt {gameModel.AttemptsTaken + 1} of 6 ---");
-                string guess = InputGuess();
-                
-                string result = FeedbackGenerator.GetAttemptFeedback(gameModel.SecretWord, guess.ToUpper());
-                gameModel.Guesses.Add(guess.ToUpper());
-                
-                DisplayFeedback(guess, result);
+                WordProvider provider =
+                    new WordProvider();
 
-                if (result == "GGGGG")
-                {
-                    gameModel.IsWon = true;
-                    gameModel.Score = FeedbackGenerator.CalculateScore(gameModel.AttemptsTaken + 1, true);
-                    Console.WriteLine($"\n{FeedbackGenerator.GetFinalFeedback(gameModel.AttemptsTaken + 1)}");
-                    return;
-                }
-                gameModel.AttemptsTaken++;
+                string secretWord =
+                    provider.GetWord(difficulty);
+
+                _gameModel =
+                    new GameModel(
+                        playerId,
+                        difficulty,
+                        secretWord
+                    );
             }
-            
-            gameModel.IsWon = false;
-            gameModel.Score = 0;
-            Console.WriteLine("\nGame Over! You ran out of attempts.");
-        }
 
-        public string InputGuess()
-        {
-            while (true)
+            public string SubmitGuess(
+                string guess)
             {
-                Console.Write("Enter a 5-letter word: ");
-                string input = Console.ReadLine()?.ToUpper() ?? "";
+                var game = _gameModel ??
+                    throw new InvalidOperationException("Game has not been started.");
 
-                try
-                {
-                    GuessValidator.ValidateWord(input, GetCurrentGame().Guesses);
-                    return input;
-                }
-                catch (InvalidGuessException ex)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Error: {ex.Message}");
-                    Console.ResetColor();
-                }
-            }
-        }
+                GuessValidator.ValidateWord(
+                    guess,
+                    game.Guesses);
 
-        private void DisplayFeedback(string guess, string feedback)
-        {
-            for (int i = 0; i < guess.Length; i++)
+                string feedback =
+                    FeedbackGenerator.GetAttemptFeedback(
+                        game.SecretWord,
+                        guess);
+
+                game.Guesses.Add(guess);
+
+                if(feedback == "GGGGG")
+                {
+                    game.IsWon = true;
+                    game.feedback=FeedbackGenerator.GetFinalFeedback(game.AttemptsTaken+1);
+                    game.Score =
+                        FeedbackGenerator.CalculateScore(
+                            game.AttemptsTaken + 1,
+                            true);
+                }
+
+                game.AttemptsTaken++;
+            if (game.AttemptsTaken == 6)
             {
-                if (feedback[i] == 'G')
-                {
-                    Console.ForegroundColor=ConsoleColor.Green;
-                    Console.Write($"{guess[i]} ");
-                }
-                else if(feedback[i] == 'Y')
-                {
-                    Console.ForegroundColor=ConsoleColor.Yellow;
-                    Console.Write($"{guess[i]} ");
-                }
-                else
-                {
-                    Console.ForegroundColor=ConsoleColor.Gray;
-                    Console.Write($"{guess[i]} ");
-                }
+                game.feedback=FeedbackGenerator.GetFinalFeedback(game.AttemptsTaken);
             }
-            Console.ResetColor();
-            Console.WriteLine();
-            for (int i = 0; i < guess.Length; i++)
+                return feedback;
+            }
+
+            public void SaveGame()
             {
-                Console.Write($"{feedback[i]} ");
+               
+                var game=_gameModel ??
+                    throw new InvalidOperationException("Game has not been started.");
+
+                scoreRepository.SaveScore(_gameModel);
             }
-            Console.WriteLine();
-        }
 
-        public GameModel GetGameState()
-        {
-            return GetCurrentGame();
-        }
+            public GameModel GetGameState()
+            {
+                return _gameModel ??
+                    throw new InvalidOperationException("Game has not been started.");
+            }
 
-        private GameModel GetCurrentGame()
-        {
-            return _gameModel ?? throw new InvalidOperationException("Game has not been started.");
-        }
+    
     }
 
-
-
 }
+

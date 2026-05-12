@@ -28,3 +28,13 @@
 /Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.pdb
 /Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.genruntimeconfig.cache
 /Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/ref/Wordle.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/DotNetEnv.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Microsoft.Extensions.Configuration.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Microsoft.Extensions.Logging.Abstractions.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Microsoft.Extensions.Primitives.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Npgsql.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/bin/Debug/net10.0/Superpower.dll
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.csproj.AssemblyReference.cache
+/Users/raghav/Documents/Training/Genspark-Training/C#/Oops/Wordle/obj/Debug/net10.0/Wordle.csproj.Up2Date

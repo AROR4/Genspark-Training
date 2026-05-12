@@ -5,7 +5,13 @@ namespace Wordle.interfaces
 {
     public interface IGameService
     {
-        void Start(Difficulty difficulty);
+        void Start(
+            int playerId,
+            Difficulty difficulty);
+
+        string SubmitGuess(string guess);
+
+        void SaveGame();
         GameModel GetGameState();
     }
 }
