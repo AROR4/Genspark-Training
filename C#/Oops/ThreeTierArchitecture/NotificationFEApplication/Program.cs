@@ -201,6 +201,7 @@ namespace NotificationSystem
                         }  
                         switch (notifchoice)
                         {
+
                             case 1: 
                                 try{
                                 List<User> users = userService.GetAllUsers();
@@ -212,38 +213,40 @@ namespace NotificationSystem
                                 }
 
                                 Console.WriteLine("Select User");
-                                for (int i = 0; i < users.Count; i++)
+                                foreach (User listedUser in users)
                                 {
-                                    Console.WriteLine($"{i + 1}. {users[i]} \n");
+                                    Console.WriteLine($"{listedUser} \n");
                                 }
 
-                                int userchoice;
-                                while (!int.TryParse(Console.ReadLine(), out userchoice)
-                                    || userchoice <= 0
-                                    || userchoice > users.Count)
+                                User? selectedUser = null;
+                                int selectedUserId;
+                                Console.Write("Enter User ID: ");
+                                while (!int.TryParse(Console.ReadLine(), out selectedUserId)
+                                    || (selectedUser = users.FirstOrDefault(user => user.Id == selectedUserId)) == null)
                                 {
-                                    Console.WriteLine("Invalid Option Selected. Please try again");
+                                    Console.Write("Invalid User ID. Please enter one of the listed IDs: ");
                                 }
 
                                 Console.WriteLine("Select Notification Type");
                                 Console.WriteLine("1.Email");
                                 Console.WriteLine("2.SMS");
                                 int singletype;
+                                Console.Write("Enter notification type: ");
                                 while (!int.TryParse(Console.ReadLine(), out singletype)
                                     || singletype <= 0
-                                    || singletype > 3)
+                                    || singletype > 2)
                                 {
-                                    Console.WriteLine("Invalid Option Selected. Please try again");
+                                    Console.Write("Invalid option. Enter 1 for Email or 2 for SMS: ");
                                 }
                                 string singleMessage ;
                                 if(singletype==1){
                                     singleMessage = GetValidMessage(NotificationType.Email);
-                                    notificationService.SendNotification(NotificationType.Email, users[userchoice - 1], singleMessage);
+                                    notificationService.SendNotification(NotificationType.Email, selectedUser, singleMessage);
                                 }
                                 else
                                 {
                                     singleMessage = GetValidMessage(NotificationType.Sms);
-                                    notificationService.SendNotification(NotificationType.Sms, users[userchoice - 1], singleMessage);
+                                    notificationService.SendNotification(NotificationType.Sms, selectedUser, singleMessage);
                                 }
                             }
                             catch(Exception e)
@@ -268,7 +271,7 @@ namespace NotificationSystem
                                 int alltype;
                                 while (!int.TryParse(Console.ReadLine(), out alltype)
                                     || alltype <= 0
-                                    || alltype > 3)
+                                    || alltype > 2)
                                 {
                                     Console.WriteLine("Invalid Option Selected. Please try again");
                                 }

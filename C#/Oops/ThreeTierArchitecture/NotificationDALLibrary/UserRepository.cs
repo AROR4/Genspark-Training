@@ -3,44 +3,67 @@ using NotificationModelLibrary;
 namespace NotificationDALLibrary{
 public class UserRepository : Repository<int,User>
 {
-    static int lastid = 0;
-
-    public override User Create(User item)
-    {
-       int userid=++lastid;
-       lastid=userid;
-       item.id=userid;
-       _items.Add(userid,item);
-       return _items[userid];
-
-    }
     public override User? GetById(int id)
     {
-        if (_items.TryGetValue(id, out var user))
+        try
         {
-            return user;
+            return _notificationContext.Users
+                .FirstOrDefault(u => u.Id == id);
         }
-        return null;
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error fetching User with id {id}: {ex.Message}");
+        }
     }
 
     public override User? Update(int id, User updatedUser)
     {
-        var user = GetById(id);
-
-        if (user != null)
+        try
         {
-            _items[id]=updatedUser;
-            return GetById(id);
+            var existingUser = GetById(id);
+
+            if (existingUser == null)
+            {
+                return null;
+            }
+
+            existingUser.PhoneNumber = updatedUser.PhoneNumber;
+            existingUser.Email = updatedUser.Email;
+
+            _notificationContext.SaveChanges();
+
+            return existingUser;
         }
-        return null;
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error updating User with id {id}: {ex.Message}");
+        }
     }
 
     public override User? Delete(int id)
     {
-        var user = GetById(id);
-        if (user != null)
-            _items.Remove(id);
-        return user;
+        try
+        {
+            var user = GetById(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            _notificationContext.Users.Remove(user);
+
+            _notificationContext.SaveChanges();
+
+            return user;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                $"Error deleting User with id {id}: {ex.InnerException?.Message}");
+        }
     }
 }
 

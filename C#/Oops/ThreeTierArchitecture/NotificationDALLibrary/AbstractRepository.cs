@@ -1,16 +1,31 @@
+using Microsoft.EntityFrameworkCore;
+using NotificationDALLibrary.Contexts;
 using NotificationDALLibrary.Interfaces;
 
 namespace NotificationDALLibrary
 {
-    public abstract class Repository<TKey, T> : IRepository<TKey, T> where TKey : notnull
+    public abstract class Repository<TKey, T> : IRepository<TKey, T> where T : class where TKey : notnull
     {
-        protected readonly Dictionary<TKey, T> _items = new();
-
-        public abstract T Create(T item);
+        
+        protected NotificationContext _notificationContext=new NotificationContext();
+        public virtual T Create(T item)
+        {
+            try
+            {
+                _notificationContext.Set<T>().Add(item);
+                _notificationContext.SaveChanges();
+                return item;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(
+                    $"Database update failed: {ex.Message}");
+            }
+        }
 
         public virtual List<T> GetAll()
         {
-            return _items.Values.ToList();
+            return _notificationContext.Set<T>().ToList();
         }
 
         public abstract T? GetById(TKey key);

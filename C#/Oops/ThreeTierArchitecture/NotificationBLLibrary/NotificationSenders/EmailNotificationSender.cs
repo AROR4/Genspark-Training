@@ -9,7 +9,8 @@ namespace NotificationBLLibrary.Senders
         public Notification Send(string Message, User user)
         {
             Console.WriteLine($"Email sent to {user.Email}: {Message} at {DateTime.Now}");
-            return new Notification(Message, NotificationType.Email, user.Email);
+
+            return new Notification(Message, NotificationType.Email, user.Email,user.Id);
         }
     }
 }
