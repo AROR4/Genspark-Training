@@ -6,7 +6,7 @@ namespace LibraryManagementSystem.Repositories
 
         T AddBook(T book);
         List<T> GetAllBooks();
-        T GetBookById(K id);
+        T? GetBookById(K id);
         List<T> SearchBooks(string title);
  
     }

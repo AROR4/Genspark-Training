@@ -59,7 +59,7 @@ namespace LibraryManagementSystem.Services
             }
         }
 
-        public Book GetBookById(int id)
+        public Book? GetBookById(int id)
         {
             try
             {
@@ -76,6 +76,11 @@ namespace LibraryManagementSystem.Services
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(title))
+                {
+                    throw new ArgumentException("Search title is required.");
+                }
+
                 var books = _bookRepository.SearchBooks(title);
                 return books;
             }

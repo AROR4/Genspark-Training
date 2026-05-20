@@ -1,5 +1,6 @@
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystem.Repositories
 {
@@ -38,10 +39,10 @@ namespace LibraryManagementSystem.Repositories
             
         }
 
-        public Book GetBookById(int id)
+        public Book? GetBookById(int id)
         {
             try{
-                return _context.Books.FirstOrDefault(b => b.BookId == id)!;
+                return _context.Books.FirstOrDefault(b => b.BookId == id);
             }
             catch(Exception ex)
             {
@@ -53,9 +54,10 @@ namespace LibraryManagementSystem.Repositories
         {
             try
             {
+                var searchTitle = title.Trim();
 
                 return _context.Books
-                        .Where(b => b.Title.ToLower().Contains(title.ToLower()))
+                        .Where(b => EF.Functions.ILike(b.Title, $"%{searchTitle}%"))
                         .ToList();
             
             }
