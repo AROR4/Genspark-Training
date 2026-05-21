@@ -156,4 +156,4 @@ Custom validations:
 The project demonstrates real-world implementation of EF Core, PostgreSQL, layered architecture, transaction handling, reporting, and business rule enforcement in a library management system.
 
 
-<!-- While going through the project, I noticed an issue in the fine addition functionality. Even though I found it after the deadline, I analyzed, debugged the problem properly and have now fixed it successfully for my learning-->
+While going through the project, I noticed an issue in the fine addition functionality. Even though I found it after the deadline, I analyzed, debugged the problem properly and have now fixed it successfully for my learning
