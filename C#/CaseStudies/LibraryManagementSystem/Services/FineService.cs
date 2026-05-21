@@ -10,11 +10,11 @@ public class FineService : IFineService
 
     private readonly LibraryDbContext _context;
 
-    public FineService()
+    public FineService(LibraryDbContext context)
     {
-        _fineRepository = new FineRepository();
+        _context = context;
 
-        _context = new LibraryDbContext();
+        _fineRepository = new FineRepository(context);
     }
 
     public List<Fine> GetPendingFines(

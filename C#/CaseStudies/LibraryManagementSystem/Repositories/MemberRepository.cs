@@ -8,9 +8,9 @@ public class MemberRepository : IMemberRepository
 {
     private readonly LibraryDbContext _context;
 
-    public MemberRepository()
+    public MemberRepository(LibraryDbContext context)
     {
-        _context = new LibraryDbContext();
+        _context = context;
     }
 
     public void AddMember(Member member)
@@ -34,13 +34,29 @@ public class MemberRepository : IMemberRepository
         {
             return _context.Members
                 .Include(m => m.MembershipType)
-                .Where(m => m.IsActive)
                 .ToList();
         }
         catch (Exception ex)
         {
             throw new Exception(
                 "Error while fetching members: "
+                + ex.Message);
+        }
+    }
+
+    public List<Member> GetActiveMembers()
+    {
+        try
+        {
+            return _context.Members
+                .Include(m => m.MembershipType)
+                .Where(m => m.IsActive)
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                "Error while fetching active members: "
                 + ex.Message);
         }
     }
@@ -147,28 +163,37 @@ public class MemberRepository : IMemberRepository
 
     public void DeactivateMember(int memberId)
     {
-        try
-        {
-            Member? member = _context.Members
-                .FirstOrDefault(
-                    m => m.MemberId == memberId);
+    try
+    {
+        Member? member = _context.Members
+            .Include(m => m.Borrowings)
+            .FirstOrDefault(
+                m => m.MemberId == memberId);
 
-            if (member == null)
-            {
-                throw new Exception(
-                    "Member not found");
-            }
-
-            member.IsActive = false;
-
-            _context.SaveChanges();
-        }
-        catch (Exception ex)
+        if (member == null)
         {
             throw new Exception(
-                "Error while deactivating member: "
-                + ex.Message);
+                "Member not found");
         }
+
+        bool hasActiveBorrowings =
+            member.Borrowings.Any(
+                b => b.Status == "Borrowed");
+
+        if (hasActiveBorrowings)
+        {
+            throw new Exception(
+                "Member cannot be deactivated because there are books not yet returned");
+        }
+
+        member.IsActive = false;
+
+        _context.SaveChanges();
+    }
+    catch (Exception ex)
+    {
+        throw new Exception(ex.Message);
+    }
     }
 
     public List<Member>

@@ -8,9 +8,9 @@ public class UserRepository : IUserRepository
 {
     private readonly LibraryDbContext _context;
 
-    public UserRepository()
+    public UserRepository(LibraryDbContext context)
     {
-        _context = new LibraryDbContext();
+        _context = context;
     }
 
     public void AddUser(User user)

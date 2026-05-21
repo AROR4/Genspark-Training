@@ -203,25 +203,27 @@ AS
 $$
 DECLARE
 
-    due_date DATE;
+    v_due_date DATE;
 
-    delayed_days INT := 0;
+    v_old_damage_percentage INT;
 
-    late_fine DECIMAL := 0;
-    damage_fine DECIMAL := 0;
-    total_fine DECIMAL := 0;
-
-    old_damage_percentage INT;
-
-    increased_damage INT := 0;
-
-    book_price DECIMAL;
+    v_book_price DECIMAL;
 
     v_book_copy_id INT;
 
+    v_delayed_days INT := 0;
+
+    v_late_fine DECIMAL := 0;
+
+    v_damage_fine DECIMAL := 0;
+
+    v_total_fine DECIMAL := 0;
+
+    v_increased_damage INT := 0;
+
 BEGIN
 
-    -- Get Borrowing + Book Details
+    -- Get all required details using borrowing id
 
     SELECT
         br."DueDate"::DATE,
@@ -230,9 +232,9 @@ BEGIN
         bc."BookCopyId"
 
     INTO
-        due_date,
-        old_damage_percentage,
-        book_price,
+        v_due_date,
+        v_old_damage_percentage,
+        v_book_price,
         v_book_copy_id
 
     FROM "Borrowings" br
@@ -248,51 +250,51 @@ BEGIN
     WHERE br."BorrowingId" =
           p_borrowing_id;
 
-    -- Borrowing validation
+    -- Validation
 
     IF NOT FOUND THEN
         RAISE EXCEPTION
-            'Borrowing not found';
+            'Borrowing record not found';
     END IF;
 
     -- Calculate delayed days
 
-    delayed_days :=
-        CURRENT_DATE - due_date;
+    v_delayed_days :=
+        CURRENT_DATE - v_due_date;
 
-    IF delayed_days > 0 THEN
-        late_fine :=
-            delayed_days * 10;
-    ELSE
-        delayed_days := 0;
+    IF v_delayed_days > 0 THEN
+
+        v_late_fine :=
+            v_delayed_days * 10;
+
     END IF;
 
-    -- Calculate damage increase
+    -- Calculate increased damage
 
-    increased_damage :=
+    v_increased_damage :=
         p_new_damage_percentage -
-        old_damage_percentage;
+        v_old_damage_percentage;
 
-    -- Damage fine logic
+    -- Damage fine calculation
 
-    IF increased_damage > 0 THEN
+    IF v_increased_damage > 0 THEN
 
         IF p_new_damage_percentage >= 100 THEN
 
-            damage_fine :=
-                book_price;
+            v_damage_fine :=
+                v_book_price;
 
-        ELSIF increased_damage >= 75 THEN
+        ELSIF v_increased_damage >= 75 THEN
 
-            damage_fine := 500;
+            v_damage_fine := 500;
 
-        ELSIF increased_damage >= 50 THEN
+        ELSIF v_increased_damage >= 50 THEN
 
-            damage_fine := 300;
+            v_damage_fine := 300;
 
-        ELSIF increased_damage >= 25 THEN
+        ELSIF v_increased_damage >= 25 THEN
 
-            damage_fine := 100;
+            v_damage_fine := 100;
 
         END IF;
 
@@ -300,67 +302,12 @@ BEGIN
 
     -- Total fine
 
-    total_fine :=
-        late_fine + damage_fine;
+    v_total_fine :=
+        v_late_fine + v_damage_fine;
 
-    -- Update Borrowing
+    -- Return only fine amount
 
-    UPDATE "Borrowings"
-
-    SET
-        "ReturnDate" = CURRENT_DATE,
-        "Status" = 'Returned'
-
-    WHERE "BorrowingId" =
-          p_borrowing_id;
-
-    -- Update BookCopy
-
-    UPDATE "BookCopies"
-
-    SET
-        "DamagePercentage" =
-            p_new_damage_percentage,
-
-        "IsAvailable" =
-            CASE
-                WHEN p_new_damage_percentage >= 100
-                THEN false
-                ELSE true
-            END,
-
-        "Status" =
-            CASE
-                WHEN p_new_damage_percentage >= 100
-                THEN 'Lost'
-                ELSE 'Available'
-            END
-
-    WHERE "BookCopyId" =
-          v_book_copy_id;
-
-    -- Create Fine if needed
-
-    IF total_fine > 0 THEN
-
-        INSERT INTO "Fines"
-        (
-            "BorrowingId",
-            "FineAmount",
-            "IsPaid",
-            "CreatedDate"
-        )
-        VALUES
-        (
-            p_borrowing_id,
-            total_fine,
-            false,
-            CURRENT_TIMESTAMP
-        );
-
-    END IF;
-
-    RETURN total_fine;
+    RETURN v_total_fine;
 
 END;
 $$;

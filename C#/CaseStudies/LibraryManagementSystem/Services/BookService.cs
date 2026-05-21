@@ -9,10 +9,10 @@ public class BookService : IBookService
     private readonly IBookRepository _bookRepository;
     private readonly IBookCopyRepository _bookCopyRepository;
 
-    public BookService()
+    public BookService(LibraryDbContext context)
     {
-        _bookRepository = new BookRepository();
-        _bookCopyRepository = new BookCopyRepository();
+        _bookRepository = new BookRepository(context);
+        _bookCopyRepository = new BookCopyRepository(context);
     }
 
     public void AddBook(Book book)
@@ -87,7 +87,7 @@ public class BookService : IBookService
         {
             throw new Exception(
                 "Error while adding book copy: "
-                + ex.Message);
+                + ex.InnerException!.Message);
         }
     }
 

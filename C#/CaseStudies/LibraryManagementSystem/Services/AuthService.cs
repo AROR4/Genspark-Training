@@ -9,10 +9,10 @@ public class AuthService : IAuthService
     private readonly IUserRepository _userRepository;
     private readonly IMemberRepository _memberRepository;
 
-    public AuthService()
+    public AuthService(LibraryDbContext context)
     {
-        _userRepository = new UserRepository();
-        _memberRepository = new MemberRepository();
+        _userRepository = new UserRepository(context);
+        _memberRepository = new MemberRepository(context);
     }
 
     public void Register(User user)

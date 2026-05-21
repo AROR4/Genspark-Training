@@ -2,6 +2,7 @@ using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Repositories;
 using LibraryManagementSystem.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystem.Services
 {
@@ -10,18 +11,17 @@ namespace LibraryManagementSystem.Services
         private readonly LibraryDbContext _context;
         private readonly IMemberRepository _memberRepository;
         private readonly IBorrowingRepository _borrowingRepository;
-
         private readonly IFineRepository _fineRepository;
         private readonly IBookCopyRepository _bookCopyRepository;
         
 
-        public BorrowingService()
+        public BorrowingService(LibraryDbContext context)
         {
-            _context = new LibraryDbContext();
-            _memberRepository=new MemberRepository();
-            _borrowingRepository=new BorrowingRepository();
-            _fineRepository=new FineRepository();
-            _bookCopyRepository=new BookCopyRepository();
+            _context = context;
+            _memberRepository=new MemberRepository(context);
+            _borrowingRepository=new BorrowingRepository(context);
+            _fineRepository=new FineRepository(context);
+            _bookCopyRepository=new BookCopyRepository(context);
         }
         public Borrowing BorrowBook(int memberId, int bookId)
         {
@@ -90,7 +90,7 @@ namespace LibraryManagementSystem.Services
 
                 BookCopy? availableCopy =
                     _bookCopyRepository
-                    .GetAvailableCopy(bookId);
+                    .GetAvailableCopyForBorrowing(bookId);
 
                 if (availableCopy == null)
                 {
@@ -143,48 +143,115 @@ namespace LibraryManagementSystem.Services
             }
         }
 
-    public decimal ReturnBook(
-    int borrowingId,
-    int newDamagePercentage)
-    {
-        using var transaction =
-            _context.Database.BeginTransaction();
-
-        try
+        public Borrowing ReturnBook(
+            int borrowingId,
+            int newDamagePercentage)
         {
-            Borrowing? borrowing =
-                _borrowingRepository
-                .GetBorrowingById(
-                    borrowingId);
+            using var transaction =
+                _context.Database.BeginTransaction();
 
-            if (borrowing == null)
+            try
             {
-                throw new Exception(
-                    "Borrowing record not found");
-            }
+                Borrowing? borrowing =
+                    _borrowingRepository
+                    .GetBorrowingById(
+                        borrowingId);
 
-            if (borrowing.Status != "Borrowed")
+                if (borrowing == null)
+                {
+                    throw new Exception(
+                        "Borrowing record not found");
+                }
+
+                if (!borrowing.Status.Equals("Borrowed"))
+                {
+                    throw new Exception(
+                        "Book already returned");
+                }
+
+                if (newDamagePercentage < 0 ||
+                    newDamagePercentage > 100)
+                {
+                    throw new Exception(
+                        "Damage percentage must be between 0 and 100");
+                }
+
+                int currentDamagePercentage =
+                    borrowing.BookCopy.DamagePercentage;
+
+                if (newDamagePercentage <
+                    currentDamagePercentage)
+                {
+                    throw new Exception(
+                        "Return damage percentage cannot be less than current damage percentage");
+                }
+
+                decimal totalFine =
+                    _borrowingRepository
+                    .ProcessBookReturn(
+                        borrowing.BorrowingId,
+                        newDamagePercentage);
+
+                //  Update Borrowing
+
+
+                borrowing.ReturnDate = DateTime.Now;
+
+                borrowing.Status =
+                    "Returned";
+                
+
+                //  Update BookCopy
+
+                borrowing.BookCopy.DamagePercentage =
+                    newDamagePercentage;
+                
+                borrowing.NewDamagePercentage = newDamagePercentage;
+                if (newDamagePercentage >= 100)
+                {
+                    borrowing.BookCopy.Status =
+                        "Lost";
+
+                    borrowing.BookCopy.IsAvailable =
+                        false;
+                }
+                else
+                {
+                    borrowing.BookCopy.Status =
+                        "Available";
+
+                    borrowing.BookCopy.IsAvailable =
+                        true;
+                }
+
+                //  Create Fine
+
+                if (totalFine > 0)
+                {
+                    Fine fine = new Fine
+                    {
+                        BorrowingId = borrowingId,
+                        FineAmount = totalFine,
+                        IsPaid = false,
+                    };
+                    borrowing.FineAmount = totalFine;
+                    _fineRepository.AddFine(fine);
+                }
+
+                _context.SaveChanges();
+
+                transaction.Commit();
+
+                return borrowing;
+            }
+            catch (Exception ex)
             {
+                transaction.Rollback();
                 throw new Exception(
-                    "Book already returned");
+                    "Error while processing book return: "
+                    + ex.Message);
             }
-
-            decimal totalFine =
-                _borrowingRepository
-                .ProcessBookReturn(
-                    borrowingId,
-                    newDamagePercentage);
-
-            transaction.Commit();
-
-            return totalFine;
         }
-        catch
-        {
-            transaction.Rollback();
-            throw;
-        }
-    }
 
         public List<Borrowing> GetActiveBorrowingsByMemberId(
             int memberId)

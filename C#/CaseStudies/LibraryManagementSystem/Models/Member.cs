@@ -32,11 +32,11 @@ public class Member
         string loginUsername =
             User?.Username ?? "N/A";
 
-        return $"Id: {MemberId} | Name: {FullName} \n " +
+        return $"=======================\n" +
+            $"Id: {MemberId} | Name: {FullName} \n " +
             $"Email: {Email} | Phone: {PhoneNumber} \n " +
             $"Address: {Address ?? "N/A"} \n  " +
             $"Membership: {membershipType} \n  " +
-            $"Login Username: {loginUsername} \n " +
             $"Active: {IsActive}";
     }
 }

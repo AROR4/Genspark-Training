@@ -9,10 +9,10 @@ public class MemberService : IMemberService
     private readonly IMemberRepository _memberRepository;
     private readonly IUserRepository _userRepository;
 
-    public MemberService()
+    public MemberService(LibraryDbContext context)
     {
-        _memberRepository = new MemberRepository();
-        _userRepository = new UserRepository();
+        _memberRepository = new MemberRepository(context);
+        _userRepository = new UserRepository(context);
     }
 
     public void AddMember(Member member)
@@ -96,6 +96,21 @@ public class MemberService : IMemberService
         {
             throw new Exception(
                 "Error while fetching members: "
+                + ex.Message);
+        }
+    }
+
+    public List<Member> GetActiveMembers()
+    {
+        try
+        {
+            return _memberRepository
+                .GetActiveMembers();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                "Error while fetching active members: "
                 + ex.Message);
         }
     }
@@ -224,43 +239,63 @@ public class MemberService : IMemberService
     public void UpdateMemberMembership(
     int memberId,
     int membershipTypeId)
+{
+    Member? member =
+        _memberRepository
+        .GetMemberById(memberId);
+
+    if (member == null)
     {
-        Member? member =
-            _memberRepository
-            .GetMemberById(memberId);
+        throw new Exception(
+            "Member not found");
+    }
 
-        if (member == null)
-        {
-            throw new Exception(
-                "Member not found");
-        }
-
-       List<MembershipType> membershipTypes =
+    List<MembershipType> membershipTypes =
         _memberRepository
         .GetAllMembershipTypes();
 
-        MembershipType? membershipType =
+    MembershipType? newMembershipType =
         membershipTypes.FirstOrDefault(
-        mt => mt.MembershipTypeId ==
-              membershipTypeId);
+            mt => mt.MembershipTypeId ==
+                  membershipTypeId);
 
-        if (membershipType == null)
-        {
-            throw new Exception(
-                "Membership type not found");
-        }
-
-        if (member.MembershipTypeId ==
-            membershipTypeId)
-        {
-            throw new Exception(
-                "Member already has this membership type");
-        }
-
-        member.MembershipTypeId =
-            membershipTypeId;
-
-        _memberRepository
-            .UpdateMember(member);
+    if (newMembershipType == null)
+    {
+        throw new Exception(
+            "Membership type not found");
     }
+
+    MembershipType? currentMembershipType =
+        membershipTypes.FirstOrDefault(
+            mt => mt.MembershipTypeId ==
+                  member.MembershipTypeId);
+
+    if (currentMembershipType == null)
+    {
+        throw new Exception(
+            "Current membership type not found");
+    }
+
+    if (member.MembershipTypeId ==
+        membershipTypeId)
+    {
+        throw new Exception(
+            "Member already has this membership type");
+    }
+
+    // Prevent downgrade
+
+    if (newMembershipType.MaxBorrowLimit <
+        currentMembershipType.MaxBorrowLimit)
+    {
+        throw new Exception(
+            "Membership downgrade is not allowed");
+    }
+
+    member.MembershipTypeId =
+        membershipTypeId;
+
+    _memberRepository
+        .UpdateMember(member);
+}
 }

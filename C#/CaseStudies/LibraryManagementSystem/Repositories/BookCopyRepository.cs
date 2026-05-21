@@ -8,9 +8,9 @@ public class BookCopyRepository : IBookCopyRepository
 {
     private readonly LibraryDbContext _context;
 
-    public BookCopyRepository()
+    public BookCopyRepository(LibraryDbContext context)
     {
-        _context = new LibraryDbContext();
+        _context = context;
     }
 
     public void AddBookCopy(BookCopy bookCopy)
@@ -97,6 +97,31 @@ public class BookCopyRepository : IBookCopyRepository
         {
             throw new Exception(
                 "Error while fetching available copy: "
+                + ex.Message);
+        }
+    }
+
+    public BookCopy? GetAvailableCopyForBorrowing(int bookId)
+    {
+        try
+        {
+            return _context.BookCopies
+                .FromSqlInterpolated($@"
+                    SELECT *
+                    FROM ""BookCopies""
+                    WHERE ""BookId"" = {bookId}
+                      AND ""IsAvailable"" = TRUE
+                      AND ""Status"" = 'Available'
+                      AND ""DamagePercentage"" < 100
+                    ORDER BY ""BookCopyId""
+                    FOR UPDATE SKIP LOCKED
+                    LIMIT 1")
+                .FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                "Error while locking available copy for borrowing: "
                 + ex.Message);
         }
     }

@@ -2,29 +2,32 @@
 using LibraryManagementSystem.Interfaces;
 using LibraryManagementSystem.Models;
 using LibraryManagementSystem.Services;
-using System.Security.Cryptography;
+
 
 namespace LibraryManagementSystem;
 
 public class Program
 {
+     static readonly LibraryDbContext _context = new LibraryDbContext();
     static readonly IAuthService _authService =
-        new AuthService();
+        new AuthService(_context);
 
     static readonly IMemberService _memberService =
-        new MemberService();
+        new MemberService(_context);
 
     static readonly IBookService _bookService =
-        new BookService();
+        new BookService(_context);
 
     static readonly IBorrowingService _borrowingService =
-        new BorrowingService();
+        new BorrowingService(_context);
 
     static readonly IFineService _fineService =
-        new FineService();
+        new FineService(_context);
 
     static readonly IReportService _reportService =
-        new ReportService();
+        new ReportService(  _context);
+    
+   
 
     public static void Main(string[] args)
     {
@@ -45,8 +48,7 @@ public class Program
                 Console.ReadLine(),
                 out choice))
             {
-                Console.WriteLine(
-                    "Please enter a valid number");
+                Console.WriteLine("Please enter a valid number");
 
                 Console.Write("Enter choice: ");
             }
@@ -130,7 +132,7 @@ public class Program
             Console.WriteLine("8. Search Books");
             Console.WriteLine("9. Deactivate Member");
             Console.WriteLine("10. Activate Member");
-            Console.WriteLine("11. Deactivate Book");
+            Console.WriteLine("11. Remove Book");
             Console.WriteLine("12. View Reports");
             Console.WriteLine("13. Logout");
 
@@ -425,9 +427,6 @@ public class Program
             }
 
             book.Price = price;
-
-            Console.Write(
-                "Published Year: ");
 
             Console.Write("Published Year: ");
 
@@ -865,7 +864,7 @@ public class Program
     {
         try
         {
-            var members =_memberService.GetAllMembers();
+            var members =_memberService.GetActiveMembers();
 
             if (members.Count == 0)
             {
@@ -986,20 +985,18 @@ public class Program
             if (books.Count == 0)
             {
                 Console.WriteLine(
-                    "Sorry no active books available");
+                    "Sorry no removable books available");
 
                 return;
             }
 
             Console.WriteLine();
-            Console.WriteLine("Active Books:");
+            Console.WriteLine("Books Available For Removal:");
 
             foreach (var book in books)
             {
                 Console.WriteLine(book);
             }
-
-            Console.Write("Book Id: ");
 
             Console.Write("Book Id: ");
 
@@ -1018,16 +1015,19 @@ public class Program
                     b => b.BookId == bookId))
             {
                 Console.WriteLine(
-                    "Sorry no matching active book available");
+                    "Sorry no matching removable book available");
 
                 return;
             }
+
+            Console.WriteLine(
+                "Removal reason: old edition / out of date / no longer needed");
 
             _bookService
                 .DeactivateBook(bookId);
 
             Console.WriteLine(
-                "Book deactivated successfully");
+                "Book removed successfully");
         }
         catch (Exception ex)
         {
@@ -1155,56 +1155,71 @@ public class Program
                 borrowings.First(
                     b => b.BorrowingId == borrowingId);
 
+            int currentDamagePercentage =
+                selectedBorrowing.BookCopy.DamagePercentage;
+
+            Console.WriteLine(
+                $"Current Damage Percentage: {currentDamagePercentage}%");
+
+            Console.WriteLine(
+                "If the book is lost, enter 100.");
+
             Console.Write(
-                "Enter New Damage Percentage(for admin): ");
+                "Enter New Damage Percentage: ");
 
             int damage;
 
             while (!int.TryParse(
                 Console.ReadLine(),
-                out damage))
+                out damage) ||
+                damage < currentDamagePercentage ||
+                damage > 100)
             {
                 Console.WriteLine(
-                    "Please enter a Valid Percetage");
+                    $"Please enter a valid percentage between {currentDamagePercentage} and 100");
 
-                Console.Write("Enter Percentage ");
+                Console.Write(
+                    "Enter New Damage Percentage: ");
             }
-            decimal fineAmount =_borrowingService.ReturnBook(borrowingId,damage);
+            Borrowing currentBorrowing =_borrowingService.ReturnBook(borrowingId,damage);
 
             Console.WriteLine(
                 "Book returned successfully");
 
             Console.WriteLine(
-                $"Book: {selectedBorrowing.BookCopy.Book.Title}");
+                $"Book: {currentBorrowing.BookCopy.Book.Title}");
 
             Console.WriteLine(
-                $"Borrowing Id: {selectedBorrowing.BorrowingId}");
+                $"Borrowing Id: {currentBorrowing.BorrowingId}");
 
             Console.WriteLine(
-                $"Borrow Date: {selectedBorrowing.BorrowDate:d}");
+                $"Borrow Date: {currentBorrowing.BorrowDate:d}");
 
             Console.WriteLine(
-                $"Due Date: {selectedBorrowing.DueDate:d}");
+                $"Due Date: {currentBorrowing.DueDate:d}");
 
             Console.WriteLine(
-                $"Return Date: {DateTime.Now:d}");
+                $"Return Date: {currentBorrowing.ReturnDate:d}");
 
             int delayedDays =
                 Math.Max(
                     0,
-                    (DateTime.Now.Date -
-                     selectedBorrowing.DueDate.Date).Days);
+                    (currentBorrowing.ReturnDate! -
+                     currentBorrowing.DueDate).Value.Days);
 
             Console.WriteLine(
                 $"Delayed Days: {delayedDays}");
 
             Console.WriteLine(
-                $"Returned Damage Percentage: {damage}%");
+                $"Returned Damage Percentage: {currentBorrowing.BookCopy.DamagePercentage}%");
 
             Console.WriteLine(
-                $"Fine Amount: {fineAmount:C}");
+                $"Book Copy Status: {currentBorrowing.BookCopy.Status}");
 
-            if (fineAmount > 0)
+            Console.WriteLine(
+                $"Fine Amount: {currentBorrowing.FineAmount}");
+
+            if (currentBorrowing.FineAmount > 0)
             {
                 Console.WriteLine(
                     "Fine was added for late return or book damage.");
@@ -1327,31 +1342,6 @@ public class Program
 
             Console.WriteLine(
                 "Fine paid successfully");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-    }
-
-    static void viewActiveBorrowings(User user)
-    {
-        try
-        {
-            var borrowings =_borrowingService.GetActiveBorrowingsByMemberId(user.MemberId!.Value);
-
-            if (borrowings.Count == 0)
-            {
-                Console.WriteLine(
-                    "No Activ borrowed book !!");
-
-                return;
-            }
-
-            foreach (var borrowing in borrowings)
-            {
-                Console.WriteLine(borrowing);
-            }
         }
         catch (Exception ex)
         {

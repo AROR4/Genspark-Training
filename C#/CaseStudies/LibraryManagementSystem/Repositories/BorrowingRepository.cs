@@ -8,9 +8,9 @@ public class BorrowingRepository : IBorrowingRepository
 {
     private readonly LibraryDbContext _context;
 
-    public BorrowingRepository()
+    public BorrowingRepository(LibraryDbContext context)
     {
-        _context = new LibraryDbContext();
+        _context = context;
     }
 
     public void AddBorrowing(Borrowing borrowing)
@@ -79,7 +79,6 @@ public class BorrowingRepository : IBorrowingRepository
                 b.BookCopy.BookId == bookId &&
                 b.ReturnDate == null);
     }
-
     public Borrowing? GetActiveBorrowingByCopyId(int bookCopyId)
     {
         return _context.Borrowings

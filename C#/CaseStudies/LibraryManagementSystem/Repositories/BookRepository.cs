@@ -8,9 +8,9 @@ public class BookRepository : IBookRepository
 {
     private readonly LibraryDbContext _context;
 
-    public BookRepository()
+    public BookRepository(LibraryDbContext context)
     {
-        _context = new LibraryDbContext();
+        _context = context;
     }
 
     public void AddBook(Book book)
@@ -23,7 +23,7 @@ public class BookRepository : IBookRepository
         catch (Exception ex)
         {
             throw new Exception(
-                "Error while adding book: " + ex.InnerException?.Message);
+                "Error while adding book: " + ex.Message);
         }
     }
 

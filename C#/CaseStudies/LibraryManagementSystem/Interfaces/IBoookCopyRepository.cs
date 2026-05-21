@@ -14,6 +14,8 @@ public interface IBookCopyRepository
 
     BookCopy? GetAvailableCopy(int bookId);
 
+    BookCopy? GetAvailableCopyForBorrowing(int bookId);
+
     void UpdateBookCopy(BookCopy bookCopy);
 
     void MarkAsBorrowed(int bookCopyId);

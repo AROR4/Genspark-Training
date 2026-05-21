@@ -7,9 +7,8 @@ public interface IMemberService
     void AddMember(Member member);
 
     List<Member> GetAllMembers();
-
+    List<Member> GetActiveMembers();
     List<Member> GetInactiveMembers();
-
     List<MembershipType> GetAllMembershipTypes();
 
     Member? GetMemberById(int memberId);

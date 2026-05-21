@@ -8,7 +8,7 @@ public interface IBorrowingService
         int memberId,
         int bookId);
 
-    decimal ReturnBook(
+    Borrowing ReturnBook(
         int borrowingId,
         int newDamagePercentage);
 

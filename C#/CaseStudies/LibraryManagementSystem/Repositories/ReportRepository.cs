@@ -8,9 +8,9 @@ public class ReportRepository : IReportRepository
 {
     private readonly LibraryDbContext _context;
 
-    public ReportRepository()
+    public ReportRepository(LibraryDbContext context)
     {
-        _context = new LibraryDbContext();
+        _context = context;
     }
 
     public Dictionary<

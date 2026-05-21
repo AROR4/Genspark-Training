@@ -8,15 +8,23 @@ public class FineRepository : IFineRepository
 {
     private readonly LibraryDbContext _context;
 
-    public FineRepository()
+    public FineRepository(LibraryDbContext context)
     {
-        _context = new LibraryDbContext();
+        _context = context;
     }
 
     public void AddFine(Fine fine)
     {
         try
         {
+            bool fineAlreadyExists = _context.Fines
+                .Any(f => f.BorrowingId == fine.BorrowingId);
+
+            if (fineAlreadyExists)
+            {
+                return;
+            }
+
             _context.Fines.Add(fine);
             _context.SaveChanges();
         }
@@ -24,7 +32,8 @@ public class FineRepository : IFineRepository
         {
             throw new Exception(
                 "Error while adding fine: "
-                + ex.Message);
+                + ex.Message,
+                ex);
         }
     }
 

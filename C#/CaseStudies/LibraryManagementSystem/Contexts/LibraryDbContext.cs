@@ -81,7 +81,7 @@ public class LibraryDbContext : DbContext
             {
                 t.HasCheckConstraint(
                     "CK_BookCopies_Status",
-                    "\"Status\" IN ('Available', 'Borrowed', 'Lost')"
+                    "\"Status\" IN ('Available', 'Borrowed', 'Lost','Damaged')"
                 );
                  t.HasCheckConstraint(
                     "CK_BookCopies_DamagePercentage",

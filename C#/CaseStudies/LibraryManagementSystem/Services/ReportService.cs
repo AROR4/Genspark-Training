@@ -9,10 +9,10 @@ public class ReportService : IReportService
     private readonly IReportRepository
         _reportRepository;
 
-    public ReportService()
+    public ReportService(LibraryDbContext context)
     {
         _reportRepository =
-            new ReportRepository();
+            new ReportRepository(context);
     }
 
     public Dictionary<
