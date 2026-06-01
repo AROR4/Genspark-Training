@@ -381,10 +381,6 @@ section{
 }
 
 
-/* =========================
-   CONTACT
-========================= */
-
 .contact{
     padding:100px 8%;
 }
@@ -474,9 +470,6 @@ section{
     transform:translateY(-5px);
 }
 
-/* =========================
-   FOOTER
-========================= */
 
 footer{
     border-top:1px solid #1a1a1a;
@@ -485,9 +478,6 @@ footer{
     color:#777;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media(max-width:900px){
 
