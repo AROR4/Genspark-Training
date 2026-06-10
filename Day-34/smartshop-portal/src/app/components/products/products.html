@@ -1,0 +1,52 @@
+<div class="products-container">
+
+    <h1>Products</h1>
+
+    @if(isLoading()) {
+
+        <div class="loading-container">
+            <p>Loading products...</p>
+        </div>
+
+
+    }
+    @if(!isLoading() && products().length === 0) {
+
+    <p>No products found.</p>
+
+    }
+    @else {
+
+        <div class="products-grid">
+
+            @for(product of products(); track product.id) {
+
+                <div class="product-card">
+
+                    <img
+                        [src]="product.thumbnail"
+                        [alt]="product.title">
+
+                    <h3>{{ product.title }}</h3>
+
+                    <p class="price">
+                        ₹{{ product.price }}
+                    </p>
+
+                    <p class="rating">
+                        ⭐ {{ product.rating }}
+                    </p>
+
+                    <button [routerLink]="['/products', product.id]">
+                        View Details
+                    </button>
+
+                </div>
+
+            }
+
+        </div>
+
+    }
+
+</div>

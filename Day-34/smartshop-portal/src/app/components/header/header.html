@@ -1,0 +1,39 @@
+@if(user) {
+<nav class="navbar">
+
+    <div class="logo">
+        SmartShop
+    </div>
+
+    <div class="nav-links">
+
+        <a routerLink="/dashboard">
+            Dashboard
+        </a>
+
+        <a routerLink="/products">
+            Products
+        </a>
+
+        <a routerLink="/profile">
+            Profile
+        </a>
+
+    </div>
+    
+    <div class="user-section">
+
+        <span>
+            Hello, {{ user.firstName }}
+        </span>
+        
+        <button
+            class="logout-btn"
+            (click)="logout()">
+            Logout
+        </button>
+        
+    </div>
+    
+</nav>
+}

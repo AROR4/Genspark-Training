@@ -1,0 +1,40 @@
+<div class="profile-container">
+
+    <div class="profile-card">
+
+        <img
+            [src]="user()?.image"
+            [alt]="user()?.firstName"
+            class="profile-image">
+
+        <h1>
+            {{ user()?.firstName }} {{ user()?.lastName }}
+        </h1>
+
+        <div class="profile-info">
+
+            <div class="info-row">
+                <span class="label">Username</span>
+                <span>{{ user()?.username }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">Email</span>
+                <span>{{ user()?.email }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">Gender</span>
+                <span>{{ user()?.gender }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">User ID</span>
+                <span>{{ user()?.id }}</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

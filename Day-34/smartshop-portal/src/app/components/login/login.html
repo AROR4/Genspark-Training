@@ -1,0 +1,58 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1>SmartShop Portal</h1>
+    <p class="subtitle">Sign in to continue</p>
+
+    <form (ngSubmit)="handleLoginClick()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          placeholder="Enter username"
+          [formField]="loginForm.username"
+        />
+        @if(loginForm.username().touched() && loginForm.username().errors().length > 0) {
+        <div class="error">
+            Username is required and must be at least 3 characters.
+        </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Enter password"
+          [formField]="loginForm.password"
+        />
+        @if(loginForm.password().touched() && loginForm.password().errors().length > 0) {
+        <div class="error">
+            Password is required.
+        </div>
+        }
+      </div>
+                @if(errorMessage()) {
+        <div class="login-error">
+            {{ errorMessage() }}
+        </div>
+        }
+      <button
+        type="submit"
+        [disabled]="progress()">
+
+        @if(!progress()) {
+            <span>Login</span>
+        }
+
+        @if(progress()) {
+            <span>Logging in...</span>
+        }
+    </button>
+    <!-- <button type="button" (click)="handleLoginClick()">
+  Login
+</button> -->
+    </form>
+  </div>
+</div>
