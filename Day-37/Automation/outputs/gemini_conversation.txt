@@ -1,0 +1,181 @@
+
+        PROMPT
+        ==================================================
+
+        You are a Senior Product Manager and Business Analyst specializing in Insurance Systems.
+
+Your task is to analyze client requirements and identify business needs, risks, assumptions, and missing information before development begins.
+
+Generate:
+
+1. Functional Requirements
+2. Non Functional Requirements
+3. Risks
+4. Assumptions
+5. Questions to Client
+
+Return ONLY valid JSON.
+
+Example:
+
+Input Requirement:
+
+A web-based library management system is needed. Librarians should be able to manage books and members. Students should be able to search books and borrow available copies. The system should send reminders for overdue books.
+
+Expected Output:
+
+{
+"project_name" : "Library Management System"
+"functional_requirements": [
+    "Manage books",
+    "Manage library members",
+    "Search books",
+    "Borrow books",
+    "Return books",
+    "Send overdue notifications"
+    ],
+"non_functional_requirements": [
+    "System availability",
+    "Usability",
+    "Performance",
+    "Security"
+    ],
+"risks": [
+    "Incorrect book inventory",
+    "Notification delivery failures"
+    ],
+"assumptions": [
+    "Students have registered accounts",
+    "Email service is available"
+    ],
+"questions": [
+    "What user roles are required?",
+    "Should fines be calculated automatically?",
+    "What notification channels should be supported?"
+    ]
+}
+
+Guidelines:
+
+1. Extract explicit requirements from the requirement document.
+2. Infer reasonable non-functional requirements when not explicitly stated.
+3. Identify business, technical, operational, and security risks.
+4. Identify assumptions necessary for implementation.
+5. Generate meaningful clarification questions for ambiguous areas.
+6. Do not include explanations outside JSON.
+7. Ensure the JSON is syntactically valid.
+
+Return JSON using exactly this structure:
+
+{
+"project_name" : "",
+"functional_requirements": [],
+"non_functional_requirements": [],
+"risks": [],
+"assumptions": [],
+"questions": []
+}
+
+Requirement:
+
+Insurance Claim Processing System
+
+To develop a web-based Insurance Claim Processing System that enables customers, claim officers, and administrators to efficiently manage insurance policies and claims.
+The system should allow customers to view their insurance policies, submit claims, upload supporting documents, and track claim status. Claim officers should be able to review submitted claims, verify documents, request additional information when required, and approve or reject claims based on policy coverage and verification results.
+The application should support policy management, claim processing, document verification, workflow approvals, audit logging, and notifications. Different user roles should have access only to the functionality relevant to their responsibilities.
+Key Requirements:
+Manage insurance policies and policy holders.
+Allow customers to submit insurance claims online.
+Upload and store supporting claim documents.
+Verify submitted documents before approval.
+Support multi-level approval workflows.
+Maintain complete audit logs for claim activities.
+Send notifications for claim status changes.
+Search and filter policies and claims.
+Generate operational and claim-related reports.
+Support secure authentication and authorization.
+Store uploaded documents securely.
+Ensure scalability for future business growth.
+We expect the system to provide a seamless experience for customers while ensuring compliance, security, and operational efficiency.
+Please review the requirements and identify any assumptions, risks, missing information, and clarification questions before development begins.
+
+
+        RESPONSE
+        ==================================================
+
+        ```json
+{
+"project_name" : "Insurance Claim Processing System",
+"functional_requirements": [
+    "Customer policy viewing",
+    "Customer claim submission",
+    "Customer supporting document upload for claims",
+    "Customer claim status tracking",
+    "Claim officer submitted claim review",
+    "Claim officer document verification",
+    "Claim officer request for additional information",
+    "Claim officer claim approval/rejection",
+    "Policy management (create, read, update, delete policies)",
+    "Policy holder management (create, read, update, delete policy holders)",
+    "Document management (upload, store, retrieve, verify documents)",
+    "Multi-level approval workflow configuration and execution",
+    "Comprehensive audit logging for claim activities",
+    "Notification sending for claim status changes",
+    "Policy search and filtering",
+    "Claim search and filtering",
+    "Generation of operational reports",
+    "Generation of claim-related reports",
+    "User authentication (login, logout)",
+    "Role-based authorization and access control",
+    "Secure storage of uploaded documents"
+    ],
+"non_functional_requirements": [
+    "Web-based accessibility",
+    "Security (authentication, authorization, data encryption, data privacy)",
+    "Scalability for future business growth",
+    "Performance (efficient claim processing, responsive user interface)",
+    "Usability (seamless customer experience, intuitive interfaces)",
+    "Reliability (data integrity, accurate claim processing, dependable notifications)",
+    "Availability (system uptime)",
+    "Auditability (complete and tamper-proof audit trails)",
+    "Compliance (adherence to relevant insurance regulations and internal policies)"
+    ],
+"risks": [
+    "Data security breach of sensitive customer, policy, and claim information.",
+    "Non-compliance with insurance industry regulations or data protection laws (e.g., GDPR, CCPA).",
+    "Incorrect claim decisions (e.g., approving fraudulent claims, rejecting valid claims) due to system errors or flawed verification processes.",
+    "Failure of notification delivery, leading to poor customer experience or missed service level agreements.",
+    "Performance bottlenecks during peak usage, impacting system efficiency and user experience.",
+    "Scalability limitations preventing the system from supporting future business growth.",
+    "Loss or corruption of uploaded supporting documents due to insecure or inadequate storage.",
+    "Incomplete or inaccurate audit logs, compromising regulatory compliance or internal investigations.",
+    "User authorization failures leading to unauthorized access to sensitive functionality or data.",
+    "Complex integration with existing core insurance systems or third-party services leading to project delays or data inconsistencies."
+    ],
+"assumptions": [
+    "Detailed policy coverage rules and claim adjudication criteria will be clearly documented and provided.",
+    "Existing policy data and policyholder information will be available in a structured format for migration or integration.",
+    "Specific formats, maximum file sizes, and verification rules for uploaded supporting documents will be defined.",
+    "Email is the primary channel for sending notifications unless other channels are explicitly requested.",
+    "All required external regulatory and internal compliance standards are known, documented, and will be provided.",
+    "The 'Administrator' role will primarily focus on system configuration, user account management, and master data related to policies and claim types.",
+    "The client will provide clear definitions, including data points and layouts, for all 'operational and claim-related reports'.",
+    "No immediate integration with external core insurance systems or payment gateways is required beyond fetching policy data initially."
+    ],
+"questions": [
+    "What specific types of insurance policies (e.g., auto, health, property, life) and corresponding claim types will the system need to support?",
+    "What are the detailed business rules and decision logic for claim adjudication and policy coverage verification for each policy and claim type?",
+    "What external systems (e.g., core insurance platform, payment gateways, fraud detection tools, CRM) require integration with this system, and what are the specific integration points?",
+    "Please define the exact requirements for 'multi-level approval workflows', including the number of levels, specific roles involved at each stage, and the approval logic (e.g., sequential, parallel, conditional).",
+    "What are the precise requirements for 'operational and claim-related reports', including specific metrics, data points, filters, frequency, and desired output formats (e.g., PDF, Excel, dashboards)?",
+    "What are the maximum file sizes and acceptable file formats for uploaded supporting documents? Are there any requirements for document OCR, content extraction, or AI-driven verification?",
+    "Beyond email, what other notification channels (e.g., SMS, in-app alerts, push notifications) should the system support for customers and internal users?",
+    "What specific functionalities are expected for the 'Administrator' role, particularly regarding system configuration, user management, and policy master data management, beyond policy/policyholder CRUD operations?",
+    "What are the anticipated peak and average user volumes (customers, claim officers, administrators) and transaction volumes (claims submitted, policies managed) in the short-term (1 year) and long-term (3-5 years)?",
+    "What specific regulatory compliance standards (e.g., HIPAA for health, PCI DSS for payments, local data privacy laws) must the system adhere to?",
+    "Are there any requirements for managing policy renewals, endorsements, cancellations, or premium adjustments within the 'policy management' module?",
+    "How should disputes or appeals related to claim rejections be handled and tracked within the system's workflow?"
+    ]
+}
+```
+        
