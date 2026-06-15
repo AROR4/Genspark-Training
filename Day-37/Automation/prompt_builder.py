@@ -37,6 +37,12 @@ class PromptBuilder:
                 self.requirement_file_path
             )
 
+            if file_path.suffix == ".txt":
+
+                return file_path.read_text(
+                    encoding="utf-8"
+                )
+            
             if file_path.suffix == ".docx":
 
                 document = Document(

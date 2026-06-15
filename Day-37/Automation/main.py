@@ -9,7 +9,7 @@ try:
 
     prompt_builder = PromptBuilder(
         prompt_file_path="prompts/requirement_analysis.prompt",
-        requirement_file_path="requirements/client_requirement.docx"
+        requirement_file_path="docs/client_requirement.docx"
     )
 
     final_prompt = prompt_builder.build_prompt()
