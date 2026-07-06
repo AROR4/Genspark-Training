@@ -1,0 +1,78 @@
+<div class="weather-card">
+  <div class="weather-header">
+    <div class="header-main">
+      <h1>Weather Dashboard</h1>
+      <p class="subtitle">Live 5-day weather forecasts from REST API</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="fetchWeather()" [disabled]="isLoading" aria-label="Refresh weather data">
+        <span class="refresh-icon" [class.spinning]="isLoading">🔄</span>
+        <span>Refresh</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="weather-body">
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="spinner-container">
+        <div class="loading-spinner"></div>
+      </div>
+      <p class="loading-text">Fetching latest weather details...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="errorMessage && !isLoading">
+      <div class="error-icon-container">
+        <span class="error-icon">⚠️</span>
+      </div>
+      <h3>Retrieval Failed</h3>
+      <p class="error-text">{{ errorMessage }}</p>
+      <button class="btn-retry" (click)="fetchWeather()">
+        Try Again
+      </button>
+    </div>
+
+    <!-- Data Table & Stats -->
+    <div class="data-content" *ngIf="!isLoading && !errorMessage && forecasts.length > 0">
+      <div class="stats-bar">
+        <span class="stats-label">Total Forecast Records:</span>
+        <span class="stats-value">{{ forecasts.length }}</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="forecast-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Temp (&deg;C)</th>
+              <th>Temp (&deg;F)</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let forecast of forecasts" [class.hot-row]="forecast.temperatureC > 30">
+              <td class="date-cell">{{ forecast.date }}</td>
+              <td class="temp-cell temp-c">
+                <span class="temp-val">{{ forecast.temperatureC }}</span>&deg;C
+              </td>
+              <td class="temp-cell temp-f">
+                <span class="temp-val">{{ forecast.temperatureF }}</span>&deg;F
+              </td>
+              <td class="summary-cell">
+                <span class="summary-badge" [attr.data-summary]="forecast.summary.toLowerCase()">
+                  {{ forecast.summary }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && !errorMessage && forecasts.length === 0">
+      <p>No forecast data available.</p>
+    </div>
+  </div>
+</div>
